@@ -14,14 +14,45 @@ public class MinesweeperBoard extends GenericBoard {
 
     @Override
     public void initBoard() {
-        board = generateRandomizedBoard(numberOfMines);
+        board = generateGradedBoard(numberOfMines);
     }
 
-    private Cell[][] generateRandomizedBoard(int amountOfCoordinates) {
+    private Cell[][] generateGradedBoard(int numberOfMines) {
+        Cell[][] cells = generateRandomizedBoard(numberOfMines);
+
+        for (int i = 0; i < ROWS; i++) {
+            for (int j = 0; j < COLS; j++) {
+                if (cells[i][j] == Cell.SAFE) {
+                    cells[i][j] = gradeCell(cells, i, j);
+                }
+            }
+        }
+
+        return cells;
+    }
+
+    private Cell gradeCell(Cell[][] cells, int row, int col) {
+        int countX = 0;
+        for (int i = row - 1; i < row + 1; i++) {
+            for (int j = col - 1; j < col + 1; j++) {
+                if (i >= 0 && i < ROWS && j >= 0 && j < COLS) {
+                    if (cells[i][j] == Cell.MINE) {
+                        countX++;
+                    }
+                }
+            }
+        }
+        if (countX == 0){
+            return Cell.SAFE;
+        }
+        return Cell.getCellFromString(String.valueOf(countX));
+    }
+
+    private Cell[][] generateRandomizedBoard(int numberOfMines) {
         Cell[][] cells = generateSafeBoard();
 
         int validRandomCellCounter = 0;
-        while (validRandomCellCounter < amountOfCoordinates) {
+        while (validRandomCellCounter < numberOfMines) {
 
             int[] randomCoord = generateRandomCoordOnBoard();
 
