@@ -16,7 +16,6 @@ public abstract class GenericBoard implements Board {
         board = new Cell[rows][cols];
         this.ROWS = rows;
         this.COLS = cols;
-        initBoard();
     }
 
     @Override

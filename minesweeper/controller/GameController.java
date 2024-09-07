@@ -14,6 +14,7 @@ public class GameController implements Runnable {
 
     @Override
     public void run() {
+        gameEngine.displayBoard();
     }
 
     private int getNumberOfMines() {
@@ -26,7 +27,7 @@ public class GameController implements Runnable {
     }
 
     private int promptNumberOFMines() {
-        Printer.print("How many mines do you want on the field?");
+        Printer.print("How many mines do you want on the field? ");
         return IOHandler.readInteger();
     }
 }

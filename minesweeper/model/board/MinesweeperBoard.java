@@ -9,6 +9,7 @@ public class MinesweeperBoard extends GenericBoard {
     public MinesweeperBoard(int rows, int cols, int numberOfMines) {
         super(rows, cols);
         this.numberOfMines = numberOfMines;
+        initBoard();
     }
 
     @Override
@@ -24,14 +25,11 @@ public class MinesweeperBoard extends GenericBoard {
 
             int[] randomCoord = generateRandomCoordOnBoard();
 
-            if (getCellState(randomCoord[0], randomCoord[1]) == Cell.MINE) {
-
-                updateBoard(randomCoord[0], randomCoord[1], Cell.MINE);
-
+            if (cells[randomCoord[0]][randomCoord[1]] != Cell.MINE) {
+                cells[randomCoord[0]][randomCoord[1]] = Cell.MINE;
                 validRandomCellCounter++;
             }
         }
-
         return cells;
     }
 
