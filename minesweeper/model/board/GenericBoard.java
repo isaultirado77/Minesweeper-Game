@@ -27,18 +27,7 @@ public abstract class GenericBoard implements Board {
     }
 
     @Override
-    public void displayBoard() {
-        //Printer.println("---------------------");
-        for (int i = 0; i < ROWS; i++) {
-            //Printer.print("| ");
-            for (int j = 0; j < COLS; j++) {
-                Printer.print(board[i][j].getSeed());
-            }
-            System.out.println();
-            //Printer.print("|\n");
-        }
-        //Printer.print("---------------------\n");
-    }
+    public abstract void displayBoard();
 
     @Override
     public Cell getCellState(int row, int col) {

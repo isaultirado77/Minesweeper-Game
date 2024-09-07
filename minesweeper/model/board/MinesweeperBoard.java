@@ -1,20 +1,40 @@
 package minesweeper.model.board;
 
+import minesweeper.io.Printer;
+
+import java.util.ArrayList;
 import java.util.Random;
 
 public class MinesweeperBoard extends GenericBoard {
 
     private final int numberOfMines;
 
+    private ArrayList<int[]> mines;
+
     public MinesweeperBoard(int rows, int cols, int numberOfMines) {
         super(rows, cols);
         this.numberOfMines = numberOfMines;
         initBoard();
+        mines = new ArrayList<>(numberOfMines);
     }
 
     @Override
     public void initBoard() {
         board = generateGradedBoard(numberOfMines);
+    }
+
+    @Override
+    public void displayBoard() {
+        //Printer.println("---------------------");
+        for (int i = 0; i < ROWS; i++) {
+            //Printer.print("| ");
+            for (int j = 0; j < COLS; j++) {
+                Printer.print(board[i][j].getSeed());
+            }
+            System.out.println();
+            //Printer.print("|\n");
+        }
+        //Printer.print("---------------------\n");
     }
 
     private Cell[][] generateGradedBoard(int numberOfMines) {
@@ -58,6 +78,7 @@ public class MinesweeperBoard extends GenericBoard {
 
             if (cells[randomCoord[0]][randomCoord[1]] != Cell.MINE) {
                 cells[randomCoord[0]][randomCoord[1]] = Cell.MINE;
+                mines.add(randomCoord);
                 validRandomCellCounter++;
             }
         }
