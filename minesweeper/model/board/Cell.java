@@ -10,7 +10,7 @@ public enum Cell {
         this.seed = seed;
     }
 
-    public String getSeed(){
+    public String getSeed() {
         return this.seed;
     }
 }

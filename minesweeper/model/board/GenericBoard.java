@@ -2,21 +2,23 @@ package minesweeper.model.board;
 
 import minesweeper.io.Printer;
 
-/** Generic board is an abstract implementation of the Board interface, providing basic functionality
+/**
+ * Generic board is an abstract implementation of the Board interface, providing basic functionality
  * for initializing and displaying a game board. Specific game logic should be implemented in subclasses.
  */
-public abstract class GenericBoard implements Board{
+public abstract class GenericBoard implements Board {
 
     protected final int ROWS;
     protected final int COLS;
     protected Cell[][] board;
 
-    public GenericBoard(int rows, int cols){
+    public GenericBoard(int rows, int cols) {
         board = new Cell[rows][cols];
         this.ROWS = rows;
         this.COLS = cols;
         initBoard();
     }
+
     @Override
     public abstract void initBoard();
 
@@ -27,15 +29,16 @@ public abstract class GenericBoard implements Board{
 
     @Override
     public void displayBoard() {
-        Printer.println("---------");
+        //Printer.println("---------------------");
         for (int i = 0; i < ROWS; i++) {
-            Printer.print("| ");
+            //Printer.print("| ");
             for (int j = 0; j < COLS; j++) {
-                Printer.print(board[i][j].getSeed() + " ");
+                Printer.print(board[i][j].getSeed());
             }
-            Printer.print("|\n");
+            System.out.println();
+            //Printer.print("|\n");
         }
-        Printer.print("---------\n");
+        //Printer.print("---------------------\n");
     }
 
     @Override
@@ -49,5 +52,5 @@ public abstract class GenericBoard implements Board{
     }
 
     @Override
-    public abstract boolean isGameOver();
+    public abstract boolean isGameOver(int[] move);
 }

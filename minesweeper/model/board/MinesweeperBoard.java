@@ -12,17 +12,17 @@ public class MinesweeperBoard extends GenericBoard {
     @Override
     public void initBoard() {
         int totalCells = ROWS * COLS;
-        int amountOfMines = totalCells * 2 / 4;
+        int amountOfMines = (int) totalCells / 2;
         board = generateRandomizedBoard(amountOfMines);
     }
 
-    private Cell[][] generateRandomizedBoard(int amountOfCoordinates){
+    private Cell[][] generateRandomizedBoard(int amountOfCoordinates) {
         Cell[][] cells = generateSafeBoard();
         ArrayList<int[]> randomCoords = generateRandomCoords(amountOfCoordinates);
-        for (int[] coord : randomCoords){
+        for (int[] coord : randomCoords) {
             cells[coord[0]][coord[1]] = Cell.MINE;
         }
-        return  cells;
+        return cells;
     }
 
     private Cell[][] generateSafeBoard() {
@@ -35,27 +35,26 @@ public class MinesweeperBoard extends GenericBoard {
         return safeBoard;
     }
 
-    private ArrayList<int[]> generateRandomCoords(int amountOfCoordinates){
+    private ArrayList<int[]> generateRandomCoords(int amountOfCoordinates) {
         ArrayList<int[]> randomCoords = new ArrayList<>();
-        for (int i = 0; i < amountOfCoordinates; i++){
+        for (int i = 0; i < amountOfCoordinates; i++) {
             int[] randomCoord = generateRandomCoordOnBoard();
             randomCoords.add(randomCoord);
         }
         return randomCoords;
     }
 
-    private int[] generateRandomCoordOnBoard(){
+    private int[] generateRandomCoordOnBoard() {
         return new int[]{generateRandomNumber(ROWS), generateRandomNumber(COLS)};
     }
 
     private int generateRandomNumber(int upper) {
         Random random = new Random();
-        return random.nextInt(upper + 1);
+        return random.nextInt(upper);
     }
 
     @Override
-    public boolean isGameOver() {
-        // Write implementation
-        return false;
+    public boolean isGameOver(int[] move) {
+        return getCellState(move[0], move[1]) == Cell.MINE;
     }
 }

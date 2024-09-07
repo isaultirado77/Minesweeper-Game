@@ -26,5 +26,5 @@ public interface Board {
 
     /** Check if the game is over based on the board's current state
      * @return true if the game is over, false otherwise. */
-    boolean isGameOver();
+    boolean isGameOver(int[] move);
 }
