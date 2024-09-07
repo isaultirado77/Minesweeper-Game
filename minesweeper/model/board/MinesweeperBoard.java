@@ -33,8 +33,8 @@ public class MinesweeperBoard extends GenericBoard {
 
     private Cell gradeCell(Cell[][] cells, int row, int col) {
         int countX = 0;
-        for (int i = row - 1; i < row + 1; i++) {
-            for (int j = col - 1; j < col + 1; j++) {
+        for (int i = row - 1; i <= row + 1; i++) {
+            for (int j = col - 1; j <= col + 1; j++) {
                 if (i >= 0 && i < ROWS && j >= 0 && j < COLS) {
                     if (cells[i][j] == Cell.MINE) {
                         countX++;
