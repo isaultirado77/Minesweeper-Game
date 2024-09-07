@@ -6,8 +6,8 @@ public class GameEngine {
 
     private final MinesweeperBoard board;
 
-    public GameEngine(){
-        this.board = new MinesweeperBoard(9, 9);
+    public GameEngine(int numberOfMines){
+        this.board = new MinesweeperBoard(9, 9, numberOfMines);
     }
 
     public void displayBoard(){

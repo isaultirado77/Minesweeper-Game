@@ -1,27 +1,37 @@
 package minesweeper.model.board;
 
-import java.util.ArrayList;
 import java.util.Random;
 
 public class MinesweeperBoard extends GenericBoard {
 
-    public MinesweeperBoard(int rows, int cols) {
+    private final int numberOfMines;
+
+    public MinesweeperBoard(int rows, int cols, int numberOfMines) {
         super(rows, cols);
+        this.numberOfMines = numberOfMines;
     }
 
     @Override
     public void initBoard() {
-        int totalCells = ROWS * COLS;
-        int amountOfMines = (int) totalCells / 2;
-        board = generateRandomizedBoard(amountOfMines);
+        board = generateRandomizedBoard(numberOfMines);
     }
 
     private Cell[][] generateRandomizedBoard(int amountOfCoordinates) {
         Cell[][] cells = generateSafeBoard();
-        ArrayList<int[]> randomCoords = generateRandomCoords(amountOfCoordinates);
-        for (int[] coord : randomCoords) {
-            cells[coord[0]][coord[1]] = Cell.MINE;
+
+        int validRandomCellCounter = 0;
+        while (validRandomCellCounter < amountOfCoordinates) {
+
+            int[] randomCoord = generateRandomCoordOnBoard();
+
+            if (getCellState(randomCoord[0], randomCoord[1]) == Cell.MINE) {
+
+                updateBoard(randomCoord[0], randomCoord[1], Cell.MINE);
+
+                validRandomCellCounter++;
+            }
         }
+
         return cells;
     }
 
@@ -33,15 +43,6 @@ public class MinesweeperBoard extends GenericBoard {
             }
         }
         return safeBoard;
-    }
-
-    private ArrayList<int[]> generateRandomCoords(int amountOfCoordinates) {
-        ArrayList<int[]> randomCoords = new ArrayList<>();
-        for (int i = 0; i < amountOfCoordinates; i++) {
-            int[] randomCoord = generateRandomCoordOnBoard();
-            randomCoords.add(randomCoord);
-        }
-        return randomCoords;
     }
 
     private int[] generateRandomCoordOnBoard() {
