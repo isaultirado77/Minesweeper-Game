@@ -27,7 +27,6 @@ public class MinesweeperBoard extends GenericBoard {
 
     @Override
     public void displayBoard() {
-
         Printer.println("\n |123456789|");
         Printer.println("-|---------|");
         for (int i = 0; i < ROWS; i++) {

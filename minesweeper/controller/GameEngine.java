@@ -27,9 +27,10 @@ public class GameEngine {
             move = getIntMove();
         } catch (IllegalArgumentException e) {
             Printer.println(e.getMessage());
-        } finally {
-            handleMove(move);
+            return;
         }
+
+        handleMove(move);
     }
 
     private int[] getIntMove() {
@@ -73,7 +74,6 @@ public class GameEngine {
     }
 
     private void handleMove(int[] move) {
-
         if (isValidMove(move)) {
             int[] validMove = getValidMove(move);
 
@@ -81,7 +81,14 @@ public class GameEngine {
                 Printer.println("There is a number here!");
             } else if (isMineCell(validMove)) {
                 board.removeMine();
-
+                if (!isGameOver()) {
+                    if (!isMarkedCell(validMove)) {
+                        board.updateBoard(validMove[0], validMove[1], Cell.MARKED);
+                    } else if (isMarkedCell(validMove)) {
+                        board.updateBoard(validMove[0], validMove[1], Cell.SAFE);
+                    }
+                    displayBoard();
+                }
             } else if (!isMarkedCell(validMove)) {
                 board.updateBoard(validMove[0], validMove[1], Cell.MARKED);
                 displayBoard();
@@ -89,6 +96,8 @@ public class GameEngine {
                 board.updateBoard(validMove[0], validMove[1], Cell.SAFE);
                 displayBoard();
             }
+        } else {
+            Printer.println("Invalid move. Please enter coordinates between 1 and 9.");
         }
     }
 
@@ -99,7 +108,9 @@ public class GameEngine {
     }
 
     private int[] getValidMove(int[] move) {
-        return new int[]{move[0] - 1, move[1] - 1};
+        int moveX = move[0];
+        int moveY = move[1];
+        return new int[]{moveY - 1, moveX - 1};
     }
 
     private boolean isMarkedCell(int[] move) {
