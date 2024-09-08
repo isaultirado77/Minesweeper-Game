@@ -2,6 +2,7 @@ package minesweeper.controller;
 
 import minesweeper.io.IOHandler;
 import minesweeper.io.Printer;
+import minesweeper.model.board.Cell;
 import minesweeper.model.board.MinesweeperBoard;
 
 import java.util.InputMismatchException;
@@ -22,19 +23,26 @@ public class GameEngine {
         return board.isGameOver();
     }
 
-    public int[] move() {
-        return new int[]{0, 0};
+    public void move() {
+        int[] move = new int[]{-1, -1};
+        try {
+            move = getIntMove();
+        } catch (IllegalArgumentException e) {
+            Printer.println(e.getMessage());
+        } finally {
+            handleMove(move);
+        }
     }
 
     private int[] getIntMove() {
         try {
             String lineMove = promptLineMove();
             String[] arrStringLineMove = getArrStringLineMove(lineMove);
-            int[] intMove = parseToIntMove(arrStringLineMove);
+            return parseToIntMove(arrStringLineMove);
         } catch (IllegalArgumentException e) {
             Printer.println(e.getMessage());
+            return new int[]{-1, -1};
         }
-        return new int[]{0, 0};
     }
 
     private int[] parseToIntMove(String[] arrStringLineMove) {
@@ -44,12 +52,12 @@ public class GameEngine {
                             Integer.parseInt(arrStringLineMove[0]),
                             Integer.parseInt(arrStringLineMove[1])
                     };
-        } catch (NumberFormatException  e) {
+        } catch (NumberFormatException e) {
             throw new NumberFormatException("Error! The input must be integers. ");
         }
     }
 
-    private String[] getArrStringLineMove(String lineMove){
+    private String[] getArrStringLineMove(String lineMove) {
         String[] arrStringLineMove = lineMove.split(" ");
 
         if (lineMove.isEmpty()) {
@@ -64,6 +72,14 @@ public class GameEngine {
     private String promptLineMove() {
         Printer.print("Set/delete mines marks (x and y coordinates): ");
         return IOHandler.readNextLine();
+    }
+
+    private void handleMove(int[] move) {
+
+    }
+
+    private boolean isMarketCell(int[] move) {
+        return board.getCellState(move[0], move[1]) == Cell.MARKED;
     }
 
 }
