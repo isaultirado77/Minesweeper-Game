@@ -3,6 +3,8 @@ package minesweeper.model.board;
 public enum Cell {
     MINE("X"),
     SAFE("."),
+    MARKED("*"),
+    FREE("/"),
     ONE("1"),
     TWO("2"),
     THREE("3"),
@@ -10,8 +12,8 @@ public enum Cell {
     FIVE("5"),
     SIX("6"),
     SEVEN("7"),
-    EIGHT("8"),
-    MARKED("*");
+    EIGHT("8")
+    ;
 
 
     private final String seed;

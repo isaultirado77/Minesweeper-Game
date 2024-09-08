@@ -36,7 +36,7 @@ public class MinesweeperBoard extends GenericBoard {
             }
             Printer.println("|");
         }
-        Printer.println("-|---------|");
+        Printer.println("-|---------|\n");
     }
 
     private Cell[][] generateGradedBoard(int numberOfMines) {

@@ -33,6 +33,11 @@ public class GameEngine {
         handleMove(move);
     }
 
+    private String promptLineMove() {
+        Printer.print("Set/delete mines marks (x and y coordinates): ");
+        return IOHandler.readNextLine();
+    }
+
     private int[] getIntMove() {
         try {
             String lineMove = promptLineMove();
@@ -66,11 +71,6 @@ public class GameEngine {
             throw new IllegalArgumentException("Error! The input must contain two numbers separated by a space. ");
         }
         return arrStringLineMove;
-    }
-
-    private String promptLineMove() {
-        Printer.print("Set/delete mines marks (x and y coordinates): ");
-        return IOHandler.readNextLine();
     }
 
     private void handleMove(int[] move) {
