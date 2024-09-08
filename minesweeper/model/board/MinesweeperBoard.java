@@ -113,4 +113,8 @@ public class MinesweeperBoard extends GenericBoard {
     public boolean isGameOver() {
         return this.mines.isEmpty();
     }
+
+    public void removeMove(int[] move) {
+        mines.remove(move);
+    }
 }

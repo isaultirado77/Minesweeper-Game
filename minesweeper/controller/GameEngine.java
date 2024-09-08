@@ -75,11 +75,32 @@ public class GameEngine {
     }
 
     private void handleMove(int[] move) {
-
+        if (!isMarkedCell(move)) {
+            board.updateBoard(move[0], move[1], Cell.MARKED);
+            displayBoard();
+        } else if (isNumberCell(move)) {
+            Printer.println("There is a number here!");
+        } else if (isMarkedCell(move)) {
+            board.updateBoard(move[0], move[1], Cell.SAFE);
+            displayBoard();
+        } else if (isMineCell(move)) {
+            board.removeMove(move);
+        }
     }
 
-    private boolean isMarketCell(int[] move) {
+    private boolean isMarkedCell(int[] move) {
         return board.getCellState(move[0], move[1]) == Cell.MARKED;
     }
 
+    private boolean isNumberCell(int[] move) {
+        Cell cellState = board.getCellState(move[0], move[1]);
+        return switch (cellState) {
+            case ONE, TWO, THREE, FOUR, FIVE, SIX, SEVEN, EIGHT -> true;
+            default -> false;
+        };
+    }
+
+    private boolean isMineCell(int[] move){
+        return board.getCellState(move[0], move[1]) == Cell.MINE;
+    }
 }
