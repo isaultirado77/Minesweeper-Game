@@ -74,32 +74,39 @@ public class GameEngine {
     }
 
     private void handleMove(int[] move) {
-        if (isValidMove(move)) {
-            int[] validMove = getValidMove(move);
+        if (!isValidMove(move)) {
+            Printer.println("Invalid move. Please enter coordinates between 1 and 9.");
+            return;
+        }
 
-            if (isNumberCell(validMove)) {
-                Printer.println("There is a number here!");
-            } else if (isMineCell(validMove)) {
-                board.removeMine();
-                if (!isGameOver()) {
-                    if (!isMarkedCell(validMove)) {
-                        board.updateBoard(validMove[0], validMove[1], Cell.MARKED);
-                    } else if (isMarkedCell(validMove)) {
-                        board.updateBoard(validMove[0], validMove[1], Cell.SAFE);
-                    }
-                    displayBoard();
-                }
-            } else if (!isMarkedCell(validMove)) {
-                board.updateBoard(validMove[0], validMove[1], Cell.MARKED);
-                displayBoard();
-            } else if (isMarkedCell(validMove)) {
-                board.updateBoard(validMove[0], validMove[1], Cell.SAFE);
+        int[] validMove = getValidMove(move);
+
+        if (isNumberCell(validMove)) {
+            Printer.println("There is a number here!");
+            return;
+        }
+
+        if (isMineCell(validMove)) {
+            board.removeMine();
+            if (!isGameOver()) {
+                toggleMark(validMove);
                 displayBoard();
             }
+            return;
+        }
+
+        toggleMark(validMove);
+        displayBoard();
+    }
+
+    private void toggleMark(int[] validMove) {
+        if (isMarkedCell(validMove)) {
+            board.updateBoard(validMove[0], validMove[1], Cell.SAFE);
         } else {
-            Printer.println("Invalid move. Please enter coordinates between 1 and 9.");
+            board.updateBoard(validMove[0], validMove[1], Cell.MARKED);
         }
     }
+
 
     private boolean isValidMove(int[] move) {
         int moveX = move[0];
