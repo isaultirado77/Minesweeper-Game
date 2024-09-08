@@ -1,7 +1,5 @@
 package minesweeper.model.board;
 
-import minesweeper.io.Printer;
-
 /**
  * Generic board is an abstract implementation of the Board interface, providing basic functionality
  * for initializing and displaying a game board. Specific game logic should be implemented in subclasses.

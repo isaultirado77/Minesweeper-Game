@@ -3,19 +3,21 @@ package minesweeper.model.board;
 import minesweeper.io.Printer;
 
 import java.util.ArrayList;
+import java.util.List;
 import java.util.Random;
 
 public class MinesweeperBoard extends GenericBoard {
 
     private final int numberOfMines;
-
-    private ArrayList<int[]> mines;
+    private int removedMines;
+    private final List<int[]> mines;
 
     public MinesweeperBoard(int rows, int cols, int numberOfMines) {
         super(rows, cols);
         this.numberOfMines = numberOfMines;
+        mines = new ArrayList<>();
         initBoard();
-        mines = new ArrayList<int[]>(numberOfMines);
+        removedMines = 0;
     }
 
     @Override
@@ -83,7 +85,7 @@ public class MinesweeperBoard extends GenericBoard {
 
             if (cells[randomCoord[0]][randomCoord[1]] != Cell.MINE) {
                 cells[randomCoord[0]][randomCoord[1]] = Cell.MINE;
-                //this.mines.add(randomCoord);
+                mines.add(randomCoord);
                 validRandomCellCounter++;
             }
         }
@@ -111,10 +113,10 @@ public class MinesweeperBoard extends GenericBoard {
 
     @Override
     public boolean isGameOver() {
-        return this.mines.isEmpty();
+        return removedMines == numberOfMines;
     }
 
-    public void removeMove(int[] move) {
-        mines.remove(move);
+    public void removeMine() {
+        removedMines++;
     }
 }

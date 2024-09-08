@@ -5,8 +5,6 @@ import minesweeper.io.Printer;
 import minesweeper.model.board.Cell;
 import minesweeper.model.board.MinesweeperBoard;
 
-import java.util.InputMismatchException;
-
 public class GameEngine {
 
     private final MinesweeperBoard board;
@@ -75,17 +73,33 @@ public class GameEngine {
     }
 
     private void handleMove(int[] move) {
-        if (!isMarkedCell(move)) {
-            board.updateBoard(move[0], move[1], Cell.MARKED);
-            displayBoard();
-        } else if (isNumberCell(move)) {
-            Printer.println("There is a number here!");
-        } else if (isMarkedCell(move)) {
-            board.updateBoard(move[0], move[1], Cell.SAFE);
-            displayBoard();
-        } else if (isMineCell(move)) {
-            board.removeMove(move);
+
+        if (isValidMove(move)) {
+            int[] validMove = getValidMove(move);
+
+            if (isNumberCell(validMove)) {
+                Printer.println("There is a number here!");
+            } else if (isMineCell(validMove)) {
+                board.removeMine();
+
+            } else if (!isMarkedCell(validMove)) {
+                board.updateBoard(validMove[0], validMove[1], Cell.MARKED);
+                displayBoard();
+            } else if (isMarkedCell(validMove)) {
+                board.updateBoard(validMove[0], validMove[1], Cell.SAFE);
+                displayBoard();
+            }
         }
+    }
+
+    private boolean isValidMove(int[] move) {
+        int moveX = move[0];
+        int moveY = move[1];
+        return moveX >= 1 && moveX <= 9 && moveY >= 1 && moveY <= 9;
+    }
+
+    private int[] getValidMove(int[] move) {
+        return new int[]{move[0] - 1, move[1] - 1};
     }
 
     private boolean isMarkedCell(int[] move) {
@@ -100,7 +114,7 @@ public class GameEngine {
         };
     }
 
-    private boolean isMineCell(int[] move){
+    private boolean isMineCell(int[] move) {
         return board.getCellState(move[0], move[1]) == Cell.MINE;
     }
 }
