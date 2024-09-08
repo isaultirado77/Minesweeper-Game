@@ -15,7 +15,7 @@ public class MinesweeperBoard extends GenericBoard {
         super(rows, cols);
         this.numberOfMines = numberOfMines;
         initBoard();
-        mines = new ArrayList<>(numberOfMines);
+        mines = new ArrayList<int[]>(numberOfMines);
     }
 
     @Override
@@ -25,16 +25,21 @@ public class MinesweeperBoard extends GenericBoard {
 
     @Override
     public void displayBoard() {
-        //Printer.println("---------------------");
+
+        Printer.println("\n |123456789|");
+        Printer.println("-|---------|");
         for (int i = 0; i < ROWS; i++) {
-            //Printer.print("| ");
+            Printer.print((i + 1) + "|");
             for (int j = 0; j < COLS; j++) {
-                Printer.print(board[i][j].getSeed());
+                if (board[i][j] == Cell.MINE) {
+                    Printer.print(Cell.SAFE.getSeed());
+                } else {
+                    Printer.print(board[i][j].getSeed());
+                }
             }
-            System.out.println();
-            //Printer.print("|\n");
+            Printer.println("|");
         }
-        //Printer.print("---------------------\n");
+        Printer.println("-|---------|");
     }
 
     private Cell[][] generateGradedBoard(int numberOfMines) {
@@ -62,7 +67,7 @@ public class MinesweeperBoard extends GenericBoard {
                 }
             }
         }
-        if (countX == 0){
+        if (countX == 0) {
             return Cell.SAFE;
         }
         return Cell.getCellFromString(String.valueOf(countX));
@@ -78,7 +83,7 @@ public class MinesweeperBoard extends GenericBoard {
 
             if (cells[randomCoord[0]][randomCoord[1]] != Cell.MINE) {
                 cells[randomCoord[0]][randomCoord[1]] = Cell.MINE;
-                mines.add(randomCoord);
+                //this.mines.add(randomCoord);
                 validRandomCellCounter++;
             }
         }
@@ -105,7 +110,7 @@ public class MinesweeperBoard extends GenericBoard {
     }
 
     @Override
-    public boolean isGameOver(int[] move) {
-        return getCellState(move[0], move[1]) == Cell.MINE;
+    public boolean isGameOver() {
+        return this.mines.isEmpty();
     }
 }

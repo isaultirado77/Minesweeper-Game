@@ -40,5 +40,5 @@ public abstract class GenericBoard implements Board {
     }
 
     @Override
-    public abstract boolean isGameOver(int[] move);
+    public abstract boolean isGameOver();
 }
