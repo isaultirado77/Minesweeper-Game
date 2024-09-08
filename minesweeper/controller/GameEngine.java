@@ -4,6 +4,7 @@ import minesweeper.io.IOHandler;
 import minesweeper.io.Printer;
 import minesweeper.model.board.Cell;
 import minesweeper.model.board.MinesweeperBoard;
+import minesweeper.model.board.Point;
 
 public class GameEngine {
 
@@ -22,15 +23,6 @@ public class GameEngine {
     }
 
     public void move() {
-        int[] move = new int[]{-1, -1};
-        try {
-            move = getIntMove();
-        } catch (IllegalArgumentException e) {
-            Printer.println(e.getMessage());
-            return;
-        }
-
-        handleMove(move);
     }
 
     private String promptLineMove() {
@@ -38,97 +30,48 @@ public class GameEngine {
         return IOHandler.readNextLine();
     }
 
-    private int[] getIntMove() {
-        try {
-            String lineMove = promptLineMove();
-            String[] arrStringLineMove = getArrStringLineMove(lineMove);
-            return parseToIntMove(arrStringLineMove);
-        } catch (IllegalArgumentException e) {
-            Printer.println(e.getMessage());
-            return new int[]{-1, -1};
+    private void handleMove(Move move) {
+        String action = move.getAction().toLowerCase();
+        switch (action) {
+            case "free":
+                break;
+            case "mine":
+                break;
+            default:
+                Printer.println("Error! The action isn't valid. ");
         }
     }
 
-    private int[] parseToIntMove(String[] arrStringLineMove) {
-        try {
-            return new int[]
-                    {
-                            Integer.parseInt(arrStringLineMove[0]),
-                            Integer.parseInt(arrStringLineMove[1])
-                    };
-        } catch (NumberFormatException e) {
-            throw new NumberFormatException("Error! The input must be integers. ");
-        }
-    }
-
-    private String[] getArrStringLineMove(String lineMove) {
-        String[] arrStringLineMove = lineMove.split(" ");
-
-        if (lineMove.isEmpty()) {
-            throw new IllegalArgumentException("Error! The line is empty. ");
-        }
-        if (arrStringLineMove.length != 2) {
-            throw new IllegalArgumentException("Error! The input must contain two numbers separated by a space. ");
-        }
-        return arrStringLineMove;
-    }
-
-    private void handleMove(int[] move) {
-        if (!isValidMove(move)) {
-            Printer.println("Invalid move. Please enter coordinates between 1 and 9.");
-            return;
-        }
-
-        int[] validMove = getValidMove(move);
-
-        if (isNumberCell(validMove)) {
-            Printer.println("There is a number here!");
-            return;
-        }
-
-        if (isMineCell(validMove)) {
-            board.removeMine();
-            if (!isGameOver()) {
-                toggleMark(validMove);
-                displayBoard();
-            }
-            return;
-        }
-
-        toggleMark(validMove);
-        displayBoard();
-    }
-
-    private void toggleMark(int[] validMove) {
-        if (isMarkedCell(validMove)) {
-            board.updateBoard(validMove[0], validMove[1], Cell.SAFE);
+    private void toggleMark(Point point) {
+        if (isMarkedCell(point)) {
+            board.updateBoard(point.x(), point.y(), Cell.SAFE);
         } else {
-            board.updateBoard(validMove[0], validMove[1], Cell.MARKED);
+            board.updateBoard(point.x(), point.y(), Cell.MARKED);
         }
     }
 
 
-    private boolean isValidMove(int[] move) {
-        int moveX = move[0];
-        int moveY = move[1];
+    private boolean isValidPointMove(Point point) {
+        int moveX = point.x();
+        int moveY = point.y();
         return moveX >= 1 && moveX <= 9 && moveY >= 1 && moveY <= 9;
     }
 
-    private int[] getValidMove(int[] move) {
-        int moveX = move[0];
-        int moveY = move[1];
-        return new int[]{moveY - 1, moveX - 1};
+    private Point getValidPointMove(Point point) {
+        int moveX = point.x();
+        int moveY = point.y();
+        return new Point(moveY - 1, moveX - 1);
     }
 
-    private boolean isMarkedCell(int[] move) {
-        return board.isMarkedCell(move);
+    private boolean isMarkedCell(Point point) {
+        return board.isMarkedCell(point.x(), point.y());
     }
 
-    private boolean isNumberCell(int[] move) {
-        return board.isNumberCell(move);
+    private boolean isNumberCell(Point point) {
+        return board.isNumberCell(point.x(), point.y());
     }
 
-    private boolean isMineCell(int[] move) {
-        return board.isMineCell(move);
+    private boolean isMineCell(Point point) {
+        return board.isMineCell(point.x(), point.y());
     }
 }

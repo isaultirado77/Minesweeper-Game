@@ -43,10 +43,6 @@ public class Move {
         return arrLine;
     }
 
-    public String getLine() {
-        return line;
-    }
-
     public Point getPoint() {
         return point;
     }
@@ -55,6 +51,9 @@ public class Move {
         return action;
     }
 
+    public void setPoint(Point point) {
+        this.point = point;
+    }
 }
 
 

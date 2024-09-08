@@ -7,13 +7,11 @@ import java.util.Random;
 public class MinesweeperBoard extends GenericBoard {
 
     private final int numberOfMines;
-    private int removedMines;
 
     public MinesweeperBoard(int rows, int cols, int numberOfMines) {
         super(rows, cols);
         this.numberOfMines = numberOfMines;
         initBoard();
-        removedMines = 0;
     }
 
     @Override
@@ -107,26 +105,25 @@ public class MinesweeperBoard extends GenericBoard {
 
     @Override
     public boolean isGameOver() {
-        return removedMines == numberOfMines;
+        return false;
     }
 
-    public boolean isMarkedCell(int[] move) {
-        return getCellState(move[0], move[1]) == Cell.MARKED;
+    public boolean isMarkedCell(int row, int col) {
+        return getCellState(row, col) == Cell.MARKED;
     }
 
-    public boolean isNumberCell(int[] move) {
-        Cell cellState = getCellState(move[0], move[1]);
+    public boolean isNumberCell(int row, int col) {
+        Cell cellState = getCellState(row,col);
         return switch (cellState) {
             case ONE, TWO, THREE, FOUR, FIVE, SIX, SEVEN, EIGHT -> true;
             default -> false;
         };
     }
 
-    public boolean isMineCell(int[] move) {
-        return getCellState(move[0], move[1]) == Cell.MINE;
+    public boolean isMineCell(int row, int col) {
+        return getCellState(row, col) == Cell.MINE;
     }
 
     public void removeMine() {
-        removedMines++;
     }
 }
