@@ -121,18 +121,14 @@ public class GameEngine {
     }
 
     private boolean isMarkedCell(int[] move) {
-        return board.getCellState(move[0], move[1]) == Cell.MARKED;
+        return board.isMarkedCell(move);
     }
 
     private boolean isNumberCell(int[] move) {
-        Cell cellState = board.getCellState(move[0], move[1]);
-        return switch (cellState) {
-            case ONE, TWO, THREE, FOUR, FIVE, SIX, SEVEN, EIGHT -> true;
-            default -> false;
-        };
+        return board.isNumberCell(move);
     }
 
     private boolean isMineCell(int[] move) {
-        return board.getCellState(move[0], move[1]) == Cell.MINE;
+        return board.isMineCell(move);
     }
 }
