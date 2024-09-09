@@ -34,7 +34,6 @@ public class GameEngine {
             return;
         }
         handleMove(move);
-        board.displayBoard();
     }
 
     private String promptLineMove() {
@@ -77,13 +76,16 @@ public class GameEngine {
                  board.unMarkMine();
              }
             board.updateBoard(point.x(), point.y(), Cell.SAFE);
+             displayBoard();
         } else if (isMineCell(point)) {
             board.updateBoard(point.x(), point.y(), Cell.MARKED);
             board.markMine();
+            displayBoard();
         } else if (isFreeCell(point)) {
             Printer.println("Error! There is a free cell. ");
         } else if (isSafeCell(point)) {
             board.updateBoard(point.x(), point.y(), Cell.MARKED);
+            displayBoard();
         } else if (isNumberCell(point)) {
             Printer.println("Error! There is a number cell. ");
         }
@@ -97,6 +99,7 @@ public class GameEngine {
             isLose = true;
         } else if (isSafeCell(point)) {
             discover(point);
+            displayBoard();
             if (checkVictoryByExploration()) {
                 Printer.println("Congratulations! You found all the mines! (by Exploration)");
                 isWin = true;
@@ -121,7 +124,7 @@ public class GameEngine {
         if (!isValidPoint(point)) {
             return;
         }
-        if (isNumberCell(point) || isFreeCell(point) || isMarkedCell(point)) {
+        if (isNumberCell(point) || isFreeCell(point)) {
             return;
         }
         int adjacentMines = board.countAdjacentMines(point.x(), point.y());

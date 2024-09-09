@@ -86,7 +86,7 @@ public class MinesweeperBoard extends GenericBoard {
             Point randomPoint = generateRandomCoordOnBoard();
 
             if (!randomPoints.contains(randomPoint)) {
-                System.out.println("MINE: " + randomPoint.toString());
+               // System.out.println("MINE: " + randomPoint.toString());
                 randomPoints.add(randomPoint);
                 validRandomCellCounter++;
             }
