@@ -36,7 +36,4 @@ public abstract class GenericBoard implements Board {
     public void updateBoard(int row, int col, Cell cell) {
         board[row][col] = cell;
     }
-
-    @Override
-    public abstract boolean isGameOver();
 }

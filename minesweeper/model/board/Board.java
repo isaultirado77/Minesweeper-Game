@@ -23,8 +23,4 @@ public interface Board {
      * @param col
      * @return the current state of the cell*/
     Cell getCellState(int row, int col);
-
-    /** Check if the game is over based on the board's current state
-     * @return true if the game is over, false otherwise. */
-    boolean isGameOver();
 }

@@ -5,12 +5,10 @@ import minesweeper.model.board.Point;
 
 public class Move {
 
-    private final String line;
     private Point point;
     private String action;
 
     public Move(String line) {
-        this.line = line;
         try {
             String[] arrLine = getArrLine(line);
             this.point = parseToPointFromString(arrLine);

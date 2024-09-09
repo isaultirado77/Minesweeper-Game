@@ -14,7 +14,7 @@ public class GameController implements Runnable {
 
     @Override
     public void run() {
-        gameEngine.displayBoard();
+        //gameEngine.displayInitialBoard();
         while (true) {
             gameEngine.move();
             if (gameEngine.isGameOver()) {

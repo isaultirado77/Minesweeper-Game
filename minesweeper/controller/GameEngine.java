@@ -18,8 +18,9 @@ public class GameEngine {
         board.displayBoard();
     }
 
+
     public boolean isGameOver() {
-        return board.isGameOver();
+        return false;
     }
 
     public void move() {
@@ -64,14 +65,14 @@ public class GameEngine {
     }
 
     private boolean isMarkedCell(Point point) {
-        return board.isMarkedCell(point.x(), point.y());
+        return board.isMarkedCell(point);
     }
 
     private boolean isNumberCell(Point point) {
-        return board.isNumberCell(point.x(), point.y());
+        return board.isNumberCell(point);
     }
 
     private boolean isMineCell(Point point) {
-        return board.isMineCell(point.x(), point.y());
+        return board.isMineCell(point);
     }
 }

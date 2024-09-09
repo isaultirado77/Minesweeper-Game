@@ -2,22 +2,25 @@ package minesweeper.model.board;
 
 import minesweeper.io.Printer;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Random;
 
 public class MinesweeperBoard extends GenericBoard {
 
-    private final int numberOfMines;
+    private final List<Point> listOfMines;
 
     public MinesweeperBoard(int rows, int cols, int numberOfMines) {
         super(rows, cols);
-        this.numberOfMines = numberOfMines;
         initBoard();
+        listOfMines = generateRandomPointsOnBoard(numberOfMines);
     }
 
     @Override
     public void initBoard() {
-        board = generateGradedBoard(numberOfMines);
+        board = generateSafeBoard();
     }
+
 
     @Override
     public void displayBoard() {
@@ -26,29 +29,21 @@ public class MinesweeperBoard extends GenericBoard {
         for (int i = 0; i < ROWS; i++) {
             Printer.print((i + 1) + "|");
             for (int j = 0; j < COLS; j++) {
-                if (board[i][j] == Cell.MINE) {
-                    Printer.print(Cell.SAFE.getSeed());
-                } else {
-                    Printer.print(board[i][j].getSeed());
-                }
+                Printer.print(board[i][j].getSeed());
             }
             Printer.println("|");
         }
         Printer.println("-|---------|\n");
     }
 
-    private Cell[][] generateGradedBoard(int numberOfMines) {
-        Cell[][] cells = generateRandomizedBoard(numberOfMines);
-
+    private Cell[][] generateSafeBoard() {
+        Cell[][] safeBoard = new Cell[ROWS][COLS];
         for (int i = 0; i < ROWS; i++) {
             for (int j = 0; j < COLS; j++) {
-                if (cells[i][j] == Cell.SAFE) {
-                    cells[i][j] = gradeCell(cells, i, j);
-                }
+                safeBoard[i][j] = Cell.SAFE;
             }
         }
-
-        return cells;
+        return safeBoard;
     }
 
     private Cell gradeCell(Cell[][] cells, int row, int col) {
@@ -68,34 +63,24 @@ public class MinesweeperBoard extends GenericBoard {
         return Cell.getCellFromString(String.valueOf(countX));
     }
 
-    private Cell[][] generateRandomizedBoard(int numberOfMines) {
-        Cell[][] cells = generateSafeBoard();
+    private List<Point> generateRandomPointsOnBoard(int numberOfMines) {
+        List<Point> randomPoints = new ArrayList<>(numberOfMines);
 
         int validRandomCellCounter = 0;
         while (validRandomCellCounter < numberOfMines) {
 
-            int[] randomCoord = generateRandomCoordOnBoard();
+            Point randomPoint = generateRandomCoordOnBoard();
 
-            if (cells[randomCoord[0]][randomCoord[1]] != Cell.MINE) {
-                cells[randomCoord[0]][randomCoord[1]] = Cell.MINE;
+            if (!randomPoints.contains(randomPoint)) {
+                randomPoints.add(randomPoint);
                 validRandomCellCounter++;
             }
         }
-        return cells;
+        return randomPoints;
     }
 
-    private Cell[][] generateSafeBoard() {
-        Cell[][] safeBoard = new Cell[ROWS][COLS];
-        for (int i = 0; i < ROWS; i++) {
-            for (int j = 0; j < COLS; j++) {
-                safeBoard[i][j] = Cell.SAFE;
-            }
-        }
-        return safeBoard;
-    }
-
-    private int[] generateRandomCoordOnBoard() {
-        return new int[]{generateRandomNumber(ROWS), generateRandomNumber(COLS)};
+    private Point generateRandomCoordOnBoard() {
+        return new Point(generateRandomNumber(ROWS), generateRandomNumber(COLS));
     }
 
     private int generateRandomNumber(int upper) {
@@ -103,27 +88,23 @@ public class MinesweeperBoard extends GenericBoard {
         return random.nextInt(upper);
     }
 
-    @Override
-    public boolean isGameOver() {
-        return false;
+    public boolean isMarkedCell(Point point) {
+        return getCellState(point.x(), point.y()) == Cell.MARKED;
     }
 
-    public boolean isMarkedCell(int row, int col) {
-        return getCellState(row, col) == Cell.MARKED;
-    }
-
-    public boolean isNumberCell(int row, int col) {
-        Cell cellState = getCellState(row,col);
+    public boolean isNumberCell(Point point) {
+        Cell cellState = getCellState(point.x(), point.y());
         return switch (cellState) {
             case ONE, TWO, THREE, FOUR, FIVE, SIX, SEVEN, EIGHT -> true;
             default -> false;
         };
     }
 
-    public boolean isMineCell(int row, int col) {
-        return getCellState(row, col) == Cell.MINE;
+    public boolean isMineCell(Point point) {
+        return getCellState(point.x(), point.y()) == Cell.MINE;
     }
 
-    public void removeMine() {
+    public void removeMine(Point point) {
+        listOfMines.remove(point);
     }
 }
