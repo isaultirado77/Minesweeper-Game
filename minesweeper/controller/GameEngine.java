@@ -25,6 +25,9 @@ public class GameEngine {
     }
 
     public void move() {
+        String line = promptLineMove();
+        Move move = new Move(line);
+        handleMove(move);
     }
 
     private String promptLineMove() {
@@ -33,13 +36,14 @@ public class GameEngine {
     }
 
     private void handleMove(Move move) {
+        Point point = getValidPointMove(move.getPoint());
         String action = move.getAction().toLowerCase();
         switch (action) {
             case "mine":
-                mineAction(move.getPoint());
+                mineAction(point);
                 break;
             case "free":
-                freeAction(move.getPoint());
+                freeAction(point);
                 break;
             default:
                 Printer.println("Error! The action isn't valid. ");
@@ -53,22 +57,36 @@ public class GameEngine {
     private void toggleMark(Point point) {
         if (isMarkedCell(point)) {
             board.updateBoard(point.x(), point.y(), Cell.SAFE);
-        } else if (!isMarkedCell(point)) {
+        } else if (isMineCell(point)) {
             board.updateBoard(point.x(), point.y(), Cell.MARKED);
+            board.removeMine();
+        } else if (isFreeCell(point)) {
+            Printer.println("Error! There is a free cell. ");
+        } else if (isSafeCell(point)) {
+            board.updateBoard(point.x(), point.y(), Cell.MARKED);
+        } else if (isNumberCell(point)) {
+            Printer.println("Error! There is a number cell. ");
         }
     }
 
     private void freeAction(Point point) {
         if (isMineCell(point)) {
             isGameOver = true;
+            placeTheMines();
             displayBoard();
         } else if (isSafeCell(point)) {
             discover(point);
         }
     }
 
+    private void placeTheMines() {
+        for (Point p : board.getListOfMines()) {
+            board.updateBoard(p.x(), p.y(), Cell.MINE);
+        }
+    }
+
     private void discover(Point point) {
-        if (board.isNumberCell(point) || isFreeCell(point) || isMarkedCell(point)) {
+        if (isNumberCell(point) || isFreeCell(point) || isMarkedCell(point)) {
             return;
         }
         int adjacentMines = board.countAdjacentMines(point.x(), point.y());
@@ -135,6 +153,7 @@ enum Directions {
     NW(-1, -1);
 
     final Point point;
+
     Directions(int x, int y) {
         point = new Point(x, y);
     }
