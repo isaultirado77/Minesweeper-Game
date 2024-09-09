@@ -33,8 +33,8 @@ public class GameEngine {
         if (move.getPoint().equals(new Point(-1, -1))){
             return;
         }
-        System.out.println(move.toString());
         handleMove(move);
+        board.displayBoard();
     }
 
     private String promptLineMove() {
@@ -118,6 +118,9 @@ public class GameEngine {
     }
 
     private void discover(Point point) {
+        if (!isValidPoint(point)) {
+            return;
+        }
         if (isNumberCell(point) || isFreeCell(point) || isMarkedCell(point)) {
             return;
         }
@@ -138,10 +141,11 @@ public class GameEngine {
         }
     }
 
+
     private boolean isValidPoint(Point point) {
         int moveX = point.x();
         int moveY = point.y();
-        return moveX >= 1 && moveX <= 9 && moveY >= 1 && moveY <= 9;
+        return moveX >= 0 && moveX < 9 && moveY >= 0 && moveY < 9;
     }
 
     private Point getValidPointMove(Point point) {

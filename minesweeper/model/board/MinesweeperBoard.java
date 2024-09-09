@@ -54,7 +54,8 @@ public class MinesweeperBoard extends GenericBoard {
         for (int i = row - 1; i <= row + 1; i++) {
             for (int j = col - 1; j <= col + 1; j++) {
                 if (i >= 0 && i < ROWS && j >= 0 && j < COLS) {
-                    if (board[i][j] == Cell.MINE) {
+                    final Point point = new Point(i, j);
+                    if (listOfMines.contains(point)) {
                         countX++;
                     }
                 }
@@ -85,6 +86,7 @@ public class MinesweeperBoard extends GenericBoard {
             Point randomPoint = generateRandomCoordOnBoard();
 
             if (!randomPoints.contains(randomPoint)) {
+                System.out.println("MINE: " + randomPoint.toString());
                 randomPoints.add(randomPoint);
                 validRandomCellCounter++;
             }
