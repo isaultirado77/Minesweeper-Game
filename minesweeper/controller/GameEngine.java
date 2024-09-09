@@ -9,18 +9,19 @@ import minesweeper.model.board.Point;
 public class GameEngine {
 
     private final MinesweeperBoard board;
+    private boolean isGameOver;
 
     public GameEngine(int numberOfMines) {
         this.board = new MinesweeperBoard(9, 9, numberOfMines);
+        this.isGameOver = false;
     }
 
     public void displayBoard() {
         board.displayBoard();
     }
 
-
     public boolean isGameOver() {
-        return false;
+        return isGameOver;
     }
 
     public void move() {
@@ -34,23 +35,27 @@ public class GameEngine {
     private void handleMove(Move move) {
         String action = move.getAction().toLowerCase();
         switch (action) {
-            case "free":
-                break;
             case "mine":
+                mineAction(move.getPoint());
+                break;
+            case "free":
                 break;
             default:
                 Printer.println("Error! The action isn't valid. ");
         }
     }
 
+    private void mineAction(Point point) {
+        toggleMark(point);
+    }
+
     private void toggleMark(Point point) {
         if (isMarkedCell(point)) {
             board.updateBoard(point.x(), point.y(), Cell.SAFE);
-        } else {
+        } else if (!isMarkedCell(point)) {
             board.updateBoard(point.x(), point.y(), Cell.MARKED);
         }
     }
-
 
     private boolean isValidPointMove(Point point) {
         int moveX = point.x();
@@ -74,5 +79,9 @@ public class GameEngine {
 
     private boolean isMineCell(Point point) {
         return board.isMineCell(point);
+    }
+
+    private boolean isListOfMinesEmpty() {
+        return board.isListOfMinesEmpty();
     }
 }

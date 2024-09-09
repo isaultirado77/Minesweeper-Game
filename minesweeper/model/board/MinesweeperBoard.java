@@ -104,6 +104,9 @@ public class MinesweeperBoard extends GenericBoard {
         return getCellState(point.x(), point.y()) == Cell.MINE;
     }
 
+    public boolean isListOfMinesEmpty() {
+        return listOfMines.isEmpty();
+    }
     public void removeMine(Point point) {
         listOfMines.remove(point);
     }
