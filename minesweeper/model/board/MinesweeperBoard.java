@@ -9,11 +9,13 @@ import java.util.Random;
 public class MinesweeperBoard extends GenericBoard {
 
     private final List<Point> listOfMines;
+    private final int numberOfMines;
     private int markedMines = 0;
 
     public MinesweeperBoard(int rows, int cols, int numberOfMines) {
         super(rows, cols);
         initBoard();
+        this.numberOfMines = numberOfMines;
         listOfMines = generateRandomPointsOnBoard(numberOfMines);
     }
 
@@ -59,6 +61,19 @@ public class MinesweeperBoard extends GenericBoard {
             }
         }
         return countX;
+    }
+
+    public int countFreeCells() {
+        int count = 0;
+        for (int i = 0; i < ROWS; i++) {
+            for (int j = 0; j < COLS; j++) {
+                final Point point = new Point(i, j);
+                if (isFreeCell(point) || isNumberCell(point)) {
+                    count++;
+                }
+            }
+        }
+        return count;
     }
 
     private List<Point> generateRandomPointsOnBoard(int numberOfMines) {
@@ -114,12 +129,16 @@ public class MinesweeperBoard extends GenericBoard {
         return listOfMines;
     }
 
-    public boolean isListOfMinesEmpty() {
-        return listOfMines.isEmpty();
+    public void markMine() {
+        markedMines++;
     }
 
-    public void removeMine() {
-        markedMines++;
+    public void unMarkMine() {
+        markedMines--;
+    }
+
+    public int getNumberOfMines() {
+        return numberOfMines;
     }
 
     public int getMarkedMines() {

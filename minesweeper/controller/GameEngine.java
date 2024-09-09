@@ -9,11 +9,14 @@ import minesweeper.model.board.Point;
 public class GameEngine {
 
     private final MinesweeperBoard board;
-    private boolean isGameOver;
+
+    private boolean isWin;
+    private boolean isLose;
 
     public GameEngine(int numberOfMines) {
         this.board = new MinesweeperBoard(9, 9, numberOfMines);
-        this.isGameOver = false;
+        this.isWin = false;
+        this.isLose = false;
     }
 
     public void displayBoard() {
@@ -21,7 +24,7 @@ public class GameEngine {
     }
 
     public boolean isGameOver() {
-        return isGameOver;
+        return isWin || isLose;
     }
 
     public void move() {
@@ -52,14 +55,25 @@ public class GameEngine {
 
     private void mineAction(Point point) {
         toggleMark(point);
+        if (checkVictoryByMarking()) {
+            Printer.println("Congratulations! You found all the mines! (by Marking)");
+            isWin = true;
+        }
+    }
+
+    public boolean checkVictoryByMarking() {
+        return board.getMarkedMines() == board.getNumberOfMines();
     }
 
     private void toggleMark(Point point) {
         if (isMarkedCell(point)) {
+             if (isMineCell(point)) {
+                 board.unMarkMine();
+             }
             board.updateBoard(point.x(), point.y(), Cell.SAFE);
         } else if (isMineCell(point)) {
             board.updateBoard(point.x(), point.y(), Cell.MARKED);
-            board.removeMine();
+            board.markMine();
         } else if (isFreeCell(point)) {
             Printer.println("Error! There is a free cell. ");
         } else if (isSafeCell(point)) {
@@ -71,12 +85,24 @@ public class GameEngine {
 
     private void freeAction(Point point) {
         if (isMineCell(point)) {
-            isGameOver = true;
             placeTheMines();
             displayBoard();
+            Printer.println("You stepped on a mine and failed!");
+            isLose = true;
         } else if (isSafeCell(point)) {
             discover(point);
+            if (checkVictoryByExploration()) {
+                Printer.println("Congratulations! You found all the mines! (by Exploration)");
+                isWin = true;
+            }
         }
+    }
+
+    private boolean checkVictoryByExploration() {
+        int freeCells = board.countFreeCells();
+        int numberOfMines = board.getNumberOfMines();
+        int totalCells = board.getTotalCells();
+        return freeCells == (totalCells - numberOfMines);
     }
 
     private void placeTheMines() {
@@ -101,7 +127,8 @@ public class GameEngine {
                 }
             }
         } else {
-            board.updateBoard(point.x(), point.y(), Cell.values()[adjacentMines]);
+            Cell numberCell = Cell.getCellFromString(String.valueOf(adjacentMines));
+            board.updateBoard(point.x(), point.y(), numberCell);
         }
     }
 
@@ -137,9 +164,6 @@ public class GameEngine {
         return board.isFreeCell(point);
     }
 
-    private boolean isListOfMinesEmpty() {
-        return board.isListOfMinesEmpty();
-    }
 }
 
 enum Directions {

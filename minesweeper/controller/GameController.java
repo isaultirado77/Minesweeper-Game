@@ -15,13 +15,9 @@ public class GameController implements Runnable {
     @Override
     public void run() {
         gameEngine.displayBoard();
-        while (true) {
+        do {
             gameEngine.move();
-            if (gameEngine.isGameOver()) {
-                Printer.println("Congratulations! You found all the mines!");
-                break;
-            }
-        }
+        } while (!gameEngine.isGameOver());
     }
 
     private int getNumberOfMines() {
