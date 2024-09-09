@@ -68,9 +68,26 @@ public class GameEngine {
     }
 
     private void discover(Point point) {
+        if (board.isNumberCell(point) || isFreeCell(point) || isMarkedCell(point)) {
+            return;
+        }
+        int adjacentMines = board.countAdjacentMines(point.x(), point.y());
+
+        if (adjacentMines == 0) {
+            board.updateBoard(point.x(), point.y(), Cell.FREE);
+
+            for (Directions dir : Directions.values()) {
+                Point neighbor = new Point(point.x() + dir.point.x(), point.y() + dir.point.y());
+                if (isValidPoint(neighbor)) {
+                    discover(neighbor);
+                }
+            }
+        } else {
+            board.updateBoard(point.x(), point.y(), Cell.values()[adjacentMines]);
+        }
     }
 
-    private boolean isValidPointMove(Point point) {
+    private boolean isValidPoint(Point point) {
         int moveX = point.x();
         int moveY = point.y();
         return moveX >= 1 && moveX <= 9 && moveY >= 1 && moveY <= 9;
@@ -98,6 +115,10 @@ public class GameEngine {
         return board.isSafeCell(point);
     }
 
+    private boolean isFreeCell(Point point) {
+        return board.isFreeCell(point);
+    }
+
     private boolean isListOfMinesEmpty() {
         return board.isListOfMinesEmpty();
     }
@@ -114,8 +135,7 @@ enum Directions {
     NW(-1, -1);
 
     final Point point;
-
     Directions(int x, int y) {
-        this.point = new Point(x, y);
+        point = new Point(x, y);
     }
 }
