@@ -39,6 +39,7 @@ public class GameEngine {
                 mineAction(move.getPoint());
                 break;
             case "free":
+                freeAction(move.getPoint());
                 break;
             default:
                 Printer.println("Error! The action isn't valid. ");
@@ -55,6 +56,18 @@ public class GameEngine {
         } else if (!isMarkedCell(point)) {
             board.updateBoard(point.x(), point.y(), Cell.MARKED);
         }
+    }
+
+    private void freeAction(Point point) {
+        if (isMineCell(point)) {
+            isGameOver = true;
+            displayBoard();
+        } else if (isSafeCell(point)) {
+            discover(point);
+        }
+    }
+
+    private void discover(Point point) {
     }
 
     private boolean isValidPointMove(Point point) {
@@ -81,7 +94,28 @@ public class GameEngine {
         return board.isMineCell(point);
     }
 
+    private boolean isSafeCell(Point point) {
+        return board.isSafeCell(point);
+    }
+
     private boolean isListOfMinesEmpty() {
         return board.isListOfMinesEmpty();
+    }
+}
+
+enum Directions {
+    N(0, -1),
+    NE(1, -1),
+    E(1, 0),
+    SE(1, 1),
+    S(0, 1),
+    SW(-1, 1),
+    W(-1, 0),
+    NW(-1, -1);
+
+    final Point point;
+
+    Directions(int x, int y) {
+        this.point = new Point(x, y);
     }
 }

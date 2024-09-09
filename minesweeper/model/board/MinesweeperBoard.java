@@ -46,21 +46,18 @@ public class MinesweeperBoard extends GenericBoard {
         return safeBoard;
     }
 
-    private Cell gradeCell(Cell[][] cells, int row, int col) {
+    public int countAdjacentMines(int row, int col) {
         int countX = 0;
         for (int i = row - 1; i <= row + 1; i++) {
             for (int j = col - 1; j <= col + 1; j++) {
                 if (i >= 0 && i < ROWS && j >= 0 && j < COLS) {
-                    if (cells[i][j] == Cell.MINE) {
+                    if (board[i][j] == Cell.MINE) {
                         countX++;
                     }
                 }
             }
         }
-        if (countX == 0) {
-            return Cell.SAFE;
-        }
-        return Cell.getCellFromString(String.valueOf(countX));
+        return countX;
     }
 
     private List<Point> generateRandomPointsOnBoard(int numberOfMines) {
@@ -102,6 +99,10 @@ public class MinesweeperBoard extends GenericBoard {
 
     public boolean isMineCell(Point point) {
         return getCellState(point.x(), point.y()) == Cell.MINE;
+    }
+
+    public boolean isSafeCell(Point point) {
+        return getCellState(point.x(), point.y()) == Cell.SAFE;
     }
 
     public boolean isListOfMinesEmpty() {
