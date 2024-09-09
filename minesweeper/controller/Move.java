@@ -15,6 +15,8 @@ public class Move {
             this.action = arrLine[2];
         } catch (IllegalArgumentException e) {
             Printer.println(e.getMessage());
+            this.point = new Point(-1, -1);
+            this.action = "NoAction";
         }
     }
 
@@ -48,10 +50,13 @@ public class Move {
     public String getAction() {
         return action;
     }
-
+    @SuppressWarnings("unused")
     public void setPoint(Point point) {
         this.point = point;
     }
+
+    @Override
+    public String toString() {
+        return "X: " + point.x() + " Y: " + point.y() + " Action: " + action;
+    }
 }
-
-

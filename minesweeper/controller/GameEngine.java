@@ -30,6 +30,10 @@ public class GameEngine {
     public void move() {
         String line = promptLineMove();
         Move move = new Move(line);
+        if (move.getPoint().equals(new Point(-1, -1))){
+            return;
+        }
+        System.out.println(move.toString());
         handleMove(move);
     }
 
@@ -39,8 +43,10 @@ public class GameEngine {
     }
 
     private void handleMove(Move move) {
+
         Point point = getValidPointMove(move.getPoint());
         String action = move.getAction().toLowerCase();
+
         switch (action) {
             case "mine":
                 mineAction(point);
